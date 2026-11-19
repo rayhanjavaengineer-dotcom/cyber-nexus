@@ -1,1 +1,21 @@
+services:
+  database:
+    image: postgres:18
+    container_name: cyber-nexus-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: cyber_nexus
+      POSTGRES_USER: cyber_nexus_user
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-CHANGE_ME}
+    ports:
+      - "5432:5432"
+    volumes:
+      - cyber_nexus_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cyber_nexus_user -d cyber_nexus"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
+volumes:
+  cyber_nexus_data:
